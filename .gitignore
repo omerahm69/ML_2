@@ -1,0 +1,50 @@
+
+# Existing rules
+core.Microsoft*
+core.mongo*
+core.python*
+env.py
+__pycache__/
+*.py[cod]
+node_modules/
+.github/
+cloudinary_python.txt
+kaggle.json
+.venv/
+
+# Python virtual environments
+venv/
+venv_clean/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Ultrasound datasets
+inputs/Dataset/
+inputs/Dataset_Clean/
+
+# TensorFlow / Keras models
+*.keras
+*.h5
+
+# Generated outputs
+outputs/
+jupyter_notebooks/outputs/
+
+# Temporary files
+*.log
+.DS_Store
+Thumbs.db
+
+# Datasets
+Dataset.zip
+*.zip
+inputs/Dataset/
+inputs/Dataset_Clean/
