@@ -1,180 +1,357 @@
+# 2D Fetal Ultrasound Image Classification Using Deep Learning
+
+## Project Overview
+
+This project investigates the application of deep learning to classify two-dimensional (2D) fetal ultrasound images into **Standard** and **Non-Standard** categories.
+
+Accurate acquisition of a standard midsagittal ultrasound view is important for evaluating fetal anatomy and measuring nuchal translucency (NT) during the first trimester of pregnancy.
+
+A Convolutional Neural Network (CNN) is developed to investigate whether image classification can support the assessment of ultrasound image standardization.
+
+The project includes exploratory data analysis, image preprocessing, CNN training, model evaluation, and a Streamlit dashboard for interactive predictions.
+
+**The model is intended for educational and research purposes only. It is not validated for clinical diagnosis or medical decision-making.**
+
+---
+
+## 1. Business Case and Dataset
+
+### Background
+
+The dataset contains 1,528 two-dimensional sagittal-view fetal ultrasound images from 1,519 pregnant patients, collected at Shenzhen People's Hospital.
+
+The images are used for Standard/Non-Standard (S-NS) plane classification, an important consideration in obtaining reliable nuchal translucency measurements.
+
+A Standard image represents a properly acquired midsagittal fetal profile in which the relevant anatomical structures can be visualized and NT measurement can be performed reliably.
+
+A Non-Standard image does not satisfy the same acquisition criteria. The distinction may involve subtle differences in positioning, image quality, and visualization of anatomical landmarks.
+
+An additional external dataset containing 156 images from the Longhua branch of Shenzhen People's Hospital is described in the dataset information.
+
+### Anatomical Annotations
+
+The dataset documentation describes annotations for nine anatomical structures in `ObjectDetection.xlsx`:
+
+1. Thalami
+2. Midbrain
+3. Palate
+4. Fourth ventricle
+5. Cisterna magna
+6. Nuchal translucency (NT)
+7. Nasal tip
+8. Nasal skin
+9. Nasal bone
+
+These annotations provide useful anatomical context. However, the CNN developed in this project focuses on image-level classification rather than object detection.
+
+### Dataset Source
+
+The dataset is available on Kaggle:
+
+[Dataset for Fetus Framework](https://www.kaggle.com/datasets/orvile/dataset-for-fetus-framework)
+
+The dataset is not included in this GitHub repository because of its size. Users should obtain it separately and review the applicable dataset terms.
+
+---
+
+## 2. Project Objectives
+
+The primary objective is to develop and evaluate a supervised deep learning model capable of classifying fetal ultrasound images into:
+
+- **Standard**
+- **Non-Standard**
+
+The project also aims to:
+
+- Explore visual characteristics of the two image categories.
+- Analyze class distribution and image variability.
+- Prepare ultrasound images for CNN training.
+- Evaluate classification performance using an independent test dataset.
+- Provide an interactive dashboard for uploading and classifying images.
+
+## 3. Conventional Data Analysis
+
+Exploratory data analysis is used to understand the dataset before model development.
+
+The visual study includes:
+
+- Class distribution analysis.
+- Mean and standard deviation images.
+- Comparison of average images between the two categories.
+- Image montages illustrating within-class variability.
+- Investigation of image dimensions and visual characteristics.
+
+These analyses help characterize the available data and identify potential differences between Standard and Non-Standard images.
+
+---
+
+## 4. Machine Learning Solution
+
+### Model Architecture
+
+A Convolutional Neural Network (CNN) is used for supervised binary image classification.
+
+The model includes:
+
+- Convolutional layers for feature extraction.
+- Max-pooling layers for spatial downsampling.
+- A flattening layer.
+- A fully connected dense layer.
+- Dropout regularization.
+- A two-neuron Softmax output layer.
+
+The network predicts one of two classes:
+
+| Class |	| Label |
+
+  0    	Non-Standard
+  1   	   Standard
 
 
-## How to use this repo
+### Image Preprocessing
 
-1. Fork this repo
+Images are resized to 256 × 256 pixels, converted to RGB format, and normalized by dividing pixel values by 255.
 
-2. In your forked  cherry leafs classifier repo click on the green Code button.
+The dataset is organized into training, validation, and test subsets.
 
-3. Then, from the Codespaces tab, click Create codespace on main.
+### Model Evaluation
 
-4. Wait for the workspace to open. This can take a few minutes.
+Model performance is assessed using:
 
-5. Open the jupyter_notebooks directory in the explorer sidebar, and click on the notebook you want to open
+- Training and validation accuracy.
+- Training and validation loss.
+- Test-set accuracy and loss.
+- Classification reports and confusion matrices, where available.
 
-6. Click the kernel button and choose Python Environments.
+Particular attention is given to generalization performance and possible class imbalance.
 
-7.Choose the kernel that says Python 3.12.1 as it inherits from the workspace, so it will be Python-3.12.1 as installed by Codespaces. To confirm this, you can use `! python --version` in a notebook code cell.
+The model's predicted Softmax scores are displayed in the dashboard. These scores should not automatically be interpreted as calibrated probabilities.
 
-## Cloud IDE Reminders
+---
 
-To log into the Heroku toolbelt CLI:
+## 5. Hypothesis and Validation
 
-1. Log in to your Heroku account and go to _Account Settings_ in the menu under your avatar.
-2. Scroll down to the _API Key_ and click _Reveal_
-3. Copy the key
-4. In the terminal, run `heroku_config`
-5. Paste in your API key when asked
+### Hypothesis
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, then you can create a new one with _Regenerate API Key_.
+A Convolutional Neural Network can learn image features that distinguish Standard from Non-Standard fetal ultrasound images.
 
-## Business Case Requirements
+### Validation Strategy
 
-General information:
-The cherry plantation crop from Farmy & Foods, a large-scale cherry plantation operator, is facing a critical issue with powdery mildew, a fungal disease affecting cherry leaves. The current inspection process is manual, requiring an employee to spend 
-~ 30 minutes per tree visually analyzing leaf samples. If mildew is found, a compound is applied in 1 minute. Given the thousands of trees across multiple farms, this approach is unscalable and labor-intensive.
+The hypothesis is evaluated by:
 
-Client Overview:
-The client aims to improve operational effeciency through automation. Pawdery mildew compromises not only the health crops but also product quality. Asimilar issue and process exist for other crops, making this initiative strategically scalable.
+1. Preparing labeled ultrasound images.
+2. Dividing the dataset into training, validation, and test sets.
+3. Training the CNN using the training data.
+4. Monitoring validation performance during training.
+5. Evaluating the final model on unseen test images.
+6. Investigating misclassifications and class-specific performance.
 
-Business reqirements:
-- Conduct a visual study to differentiate healthy cherry leaves from those affected by powdery mildew.
-- Develop a predictive model that can classifies leaf images as healthy or infected.
-- Provide a user-friendly dashboard for field use.
-- Achieve a minimum model accuracy of 97% to meet success criteria.
-  
-Coventional Data Analysis:
-Traditional data analysis can support the visual study by:
-- Identifying visual patterns in infected versus health leaves.
-- Highlighting key visual features (e.g., color distribution, texture features, and leaf shape)
-- Providing explainable insighs into the model's behavior.
+A successful evaluation requires more than high training accuracy. The model must demonstrate reliable performance on independent test data.
 
-ML Solution
-To save time in this process, the IT team suggested an ML system that detects instantly, using a leaf tree image, if it is healthy or has powdery mildew. A similar manual process is in place for other crops for detecting pests, and if this initiative is successful, there is a realistic chance to replicate this project for all other crops.
+---
 
-Dataset: The dataset is a collection of over 4,000 cherry leaf images (healthy and infected), provided by the client and also hosted on Kaggle.  
+## 6. Mapping Business Requirements to ML Tasks
 
- 1 - The client is interested in conducting a study to visually differentiate a healthy cherry leaf from one with powdery mildew.
- 2 - The client is interested in predicting if a cherry leaf is healthy or contains powdery mildew.
+### Requirement 1: Visual Study
 
-## Hypothesis and validation
-Hypothesis:
-A Convolutional Neural Network (CNN) can accurately classify cherry leaf images into healthy or Powdery Mildew categories.  
+**Business requirement:** Investigate visual differences between Standard and Non-Standard ultrasound images.
 
-Validation Steps:
--    Use a balanced dataset with sufficient examples from both classes.
--    Track performance metrics such as accuracy and precision
--    Evaluate against a seperate test set to ensure generalizability.
+**Mapped tasks:**
 
-## Mapping Business Requirements to ML Tasks
+- Display mean and standard deviation images.
+- Compare average images between classes.
+- Generate image montages.
+- Analyze class distributions.
 
-Requuirement 1 - Visual Study 
-Mapped to Data Visualisations Tasks:
-- Display class-wise mean and standard deviation images.
-- Show the difference between average images of both classes.
-- Present image montages to visualize variation. 
+### Requirement 2: Image Classification
 
-Requirement 2 - Prediction
-Mapped to ML Tasks:
-- Train a binary classifier (Healthy vs. Powdery Mildew).
-- Generate classification reports and evaluate with metrics.
-- Deploy predictions through a web-based dashboard.
+**Business requirement:** Develop a model that predicts whether an ultrasound image is Standard or Non-Standard.
 
-## ML Business Case
-We want an ML model to predict if an image is healthy or not based on historical image data. It is a supervised binary classification model that predicts whether a cherry leaf is healthy or infected.
-The output includes:
--    A classification label
--    Associated probability/confidence score.
+**Mapped tasks:**
 
-Success Metric:
-The client consider a succeful project outcome as:
--  A study showing how to visually differentiate a cherry leaf that is helathy form pwdery mildew
--  The capability of the model to predict if a cherry leaf is healthy or contains powdery mildew 
+- Train a CNN classifier.
+- Evaluate predictive performance.
+- Generate a predicted class and associated model score.
+- Integrate the model into an interactive Streamlit dashboard.
 
-Ethical and Privacy Considerations:
-- The client provided the data under an NDA (non-disclosure agreement),
-- The data should only be shared with professionals that are officially involved in the project.
+---
 
-Project Breakdown
-Epics and User Stories
-1. Information Gathering and Data Collection
-   - As a data scintist, I need access to labeled leaf images to train and test the model.
-3. Data Visualization, Cleaning and Preparation
-   - As a data analyst, I want to explore visual differencies to assist in the visual study.
-4. Model Training and Visulaization
-   - As an ML engineer, I want to train a binary classifier to distinguish leaf health status.
-5. Dashboard Development
-    - As a frontend developer, I want to design and build an intuitive dashboard.
-7. Deployment and Release
-   - As a DevOps engineer, I want to deploy thedashboard securely and reliably
+## 7. Dashboard Design
 
-Business Benefit:
--    Reduce inspection time from 30 minutes to seconds per tree.
--    Prevent supply chain contamination with compromised produce.
--    Enable future cross-crop scalability for other fungal or pest infections.
+The Streamlit dashboard is organized into five main pages.
 
-## Dashboard Design
+### Page 1: Project Summary
 
-Page 1: Project Summary
-- Overview of the powdery mildew challenge.
-- ML as proposed scalable solution
-- Dataset origin and structure
-- Clear project goal to classify cherry leaf images into Healthy or Powdery Mildew.
+Introduces the project, dataset, clinical background, and classification objective.
 
-Page 2: Hypothesis and Validation
-   - List and explain each hypothesis.
-   - Describe methods and results of validation
+### Page 2: Hypothesis and Validation
 
-Page 3: Visual Study Findings
-    It will answer buisness requirement 1:
-   - Checkbox 1 - Difference between average and variability image
-   - Checkbox 2 - Differences between average
-   - Checkbox 3 - Image Montage -Leaf montage for both categories 
+Describes the machine learning hypothesis and the approach used to validate it.
 
-Page 4: ML Performance Metrics
-   - Class distribution in training, validation and test sets
-   - Model Training History - Accuracy and Losses
-   - Final Model evaluation result (metrics)
+### Page 3: Visual Study Findings
 
-Page 5: Live Predictions
-   -  Upload an image cherry leaf (JPG/PNG)
-   -  Receive instant prediction:  Healthy or Powdery Mildew affected.
+Presents the exploratory image analysis, including:
 
+- Mean and standard deviation images.
+- Differences between average images.
+- Image montages for both classes.
 
-## Unfixed Bugs
+### Page 4: ML Performance Metrics
 
-- Is the dashboard expectations of having a table with the image name and prediction results, and download button to download the table 
+Presents model evaluation results, including:
 
-## Deployment
+- Class distribution across datasets.
+- Training and validation accuracy.
+- Training and validation loss.
+- Final test evaluation metrics.
 
-### Heroku
+### Page 5: Live Predictions
 
+Allows users to:
 
-- The App live link is: `'https://dashboard.heroku.com/apps/predictive-project/'
-- The App live link is: `https://dashboard.heroku.com/apps/predictive-project/'
-- Set the runtime.txt Python version to a [Heroku-20](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version.
-- The project was deployed to Heroku using the following steps.
+- Upload an ultrasound image in JPG or PNG format.
+- Run the trained CNN model.
+- View the predicted Standard or Non-Standard class.
+- Inspect the model's output scores.
 
-1. Log in to Heroku and create an App
-2. At the Deploy tab, select GitHub as the deployment method.
-3. Select your repository name and click Search. Once it is found, click Connect.
-4. Select the branch you want to deploy, then click Deploy Branch.
-5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button Open App on the top of the page to access your App.
-6. If the slug size is too large, then add large files not required for the app to the .slugignore file.
+---
 
-## Main Data Analysis and Machine Learning Libraries
--   Python
--   NumPy, Pandas, matplotlib, Tensorflow, seaborn
--   Streamlit
--   jupyter
--   GitHub
--   Heroku
+## 8. Repository Structure
 
-## Credits
+```text
+ML_2/
+├── app.py
+├── app_pages/
+│   ├── page_summary.py
+│   ├── page_hypothesis.py
+│   ├── page_visual_study_findings.py
+│   ├── page_ML_performance.py
+│   └── page_live_predictions.py
+├── jupyter_notebooks/
+│   ├── Data Collection.ipynb
+│   ├── Data visualization.ipynb
+│   └── Modelling and Evaluating.ipynb
+├── src/
+│   ├── data_management.py
+│   └── machine_learning/
+│       ├── evaluate_clf.py
+│       └── predictive_analysis.py
+├── requirements.txt
+├── setup.sh
+├── heroku.yml
+├── README.md
+└── .gitignore
+```
 
-- The process from the Code Institute WalkthroughProject01 project was used to help create this project.
-    In addition to the material from the course, 'Data Analytics Packages' I had from Code Institute
+Generated outputs, trained models, and datasets are excluded from version control where appropriate.
 
-## Acknowledgements (optional)
+---
 
-- I'm extremely grateful to the completion of my Diploma Full Stack Software Development, it would not have been possible without the support and nurturing of my mentor Mr. Daniel Hamilton.Thank you for Code Institute for giving me the opportunity to join the program and thanks to all of the staff, student care and student support for their patience and encouragement.
+## 9. Installation and Local Setup
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/omerahm69/ML_2.git
+cd ML_2
+```
+
+### Create a Virtual Environment
+
+On Windows:
+
+```powershell
+python -m venv venv_clean
+.\venv_clean\Scripts\Activate.ps1
+```
+
+### Install Dependencies
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+### Start JupyterLab
+
+```powershell
+jupyter lab
+```
+
+Open the notebooks in `jupyter_notebooks/` to explore the data analysis and model development workflow.
+
+### Run the Streamlit Dashboard
+
+```powershell
+python -m streamlit run app.py
+```
+
+**Important:** The dashboard requires the relevant generated analysis outputs and trained CNN model. These are not necessarily included in the repository and must be created or supplied separately at the paths expected by the application.
+
+---
+
+## 10. GitHub Codespaces
+
+GitHub Codespaces provides a cloud-based development environment.
+
+To use it:
+
+1. Fork the repository or open it directly on GitHub.
+2. Click **Code**.
+3. Select the **Codespaces** tab.
+4. Create a codespace on the `main` branch.
+5. Wait for the development environment to initialize.
+6. Open the `jupyter_notebooks/` directory.
+7. Select an available Python kernel.
+8. Install missing dependencies if necessary.
+
+Check the active Python version using:
+
+```python
+import sys
+print(sys.version)
+```
+
+The available Python version depends on the Codespaces environment and configuration.
+
+---
+
+## 11. Technologies and Libraries
+
+The project uses:
+
+- Python
+- TensorFlow / Keras
+- NumPy
+- Pandas
+- Matplotlib
+- Seaborn
+- Scikit-learn
+- Pillow
+- JupyterLab
+- Streamlit
+- Git and GitHub
+
+Deployment-related configuration files are also included in the repository.
+
+---
+
+## 12. Project Limitations
+
+The following limitations should be considered:
+
+- The dataset may contain class imbalance.
+- Images may differ in acquisition conditions and quality.
+- Good training or validation performance does not guarantee generalization.
+- Evaluation on external clinical datasets is important before considering practical use.
+- Softmax scores do not necessarily represent calibrated confidence.
+- The model performs image classification, not anatomical structure localization or NT measurement.
+
+The system is a research prototype and must not be used as a substitute for qualified clinical assessment.
+
+---
+
+## 13. Project Repository
+
+GitHub: [omerahm69/ML_2](https://github.com/omerahm69/ML_2)
+
+Dataset: [Kaggle — Dataset for Fetus Framework](https://www.kaggle.com/datasets/orvile/dataset-for-fetus-framework)
