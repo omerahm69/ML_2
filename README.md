@@ -1,6 +1,6 @@
 # 2D Fetal Ultrasound Image Classification Using Deep Learning
 
-## Project Overview
+# Project Overview
 
 This project investigates the application of deep learning to classify two-dimensional (2D) fetal ultrasound images into **Standard** and **Non-Standard** categories.
 
@@ -10,13 +10,13 @@ A Convolutional Neural Network (CNN) is developed to investigate whether image c
 
 The project includes exploratory data analysis, image preprocessing, CNN training, model evaluation, and a Streamlit dashboard for interactive predictions.
 
-**The model is intended for educational and research purposes only. It is not validated for clinical diagnosis or medical decision-making.**
+*The model is intended for educational and research purposes only. It is not validated for clinical diagnosis or medical decision-making.**
 
 ---
 
-## 1. Business Case and Dataset
+# 1. Business Case and Dataset
 
-### Background
+## Background
 
 The dataset contains 1,528 two-dimensional sagittal-view fetal ultrasound images from 1,519 pregnant patients, collected at Shenzhen People's Hospital.
 
@@ -28,7 +28,7 @@ A Non-Standard image does not satisfy the same acquisition criteria. The distinc
 
 An additional external dataset containing 156 images from the Longhua branch of Shenzhen People's Hospital is described in the dataset information.
 
-### Anatomical Annotations
+## Anatomical Annotations
 
 The dataset documentation describes annotations for nine anatomical structures in `ObjectDetection.xlsx`:
 
@@ -44,7 +44,7 @@ The dataset documentation describes annotations for nine anatomical structures i
 
 These annotations provide useful anatomical context. However, the CNN developed in this project focuses on image-level classification rather than object detection.
 
-### Dataset Source
+## Dataset Source
 
 The dataset is available on Kaggle:
 
